@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#09090d">
+  <title>EchoMap — Open Source Event Timeline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="EchoMap home">
+        <span class="brand-mark" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+        <span>ECHOMAP</span>
+      </a>
+      <nav class="top-tabs" role="tablist" aria-label="EchoMap pages">
+        <button id="exploreTab" class="top-tab active" type="button" role="tab" aria-selected="true" aria-controls="explorePanel" tabindex="0">Explore</button>
+        <button id="infoTab" class="top-tab" type="button" role="tab" aria-selected="false" aria-controls="infoPanel" tabindex="-1">How it helps &amp; privacy</button>
+      </nav>
+      <div class="topbar-status">
+        <span class="status-dot"></span>
+        PUBLIC NEWS INDEX
+      </div>
+    </header>
+
+    <main id="explorePanel" role="tabpanel" aria-labelledby="exploreTab" tabindex="0">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">OPEN-SOURCE INTELLIGENCE / TIMELINE</p>
+          <h1>Trace events.<br><em>Connect sources.</em></h1>
+          <p class="hero-note">Select a place to scan public news and build a dated event timeline.</p>
+        </div>
+        <div class="hero-visual" id="heroVisual" role="group" aria-label="Interactive animated news globe" aria-describedby="globeInstructions">
+          <div class="globe-topline">
+            <span><i class="globe-status" aria-hidden="true"></i> GLOBAL EVENT NETWORK</span>
+            <span>MAP / 01</span>
+          </div>
+          <div class="globe-stage" id="globeStage">
+            <div class="globe-orbit globe-orbit-one" aria-hidden="true"></div>
+            <div class="globe-orbit globe-orbit-two" aria-hidden="true"></div>
+            <div class="globe-sphere" aria-hidden="true">
+              <svg class="globe-art" viewBox="0 0 300 300">
+                <defs>
+                  <clipPath id="heroGlobeClip"><circle cx="150" cy="150" r="143"/></clipPath>
+                  <radialGradient id="heroGlobeFill" cx="34%" cy="28%" r="80%">
+                    <stop offset="0" stop-color="#562033"/>
+                    <stop offset="0.62" stop-color="#1b111b"/>
+                    <stop offset="1" stop-color="#0b0b11"/>
+                  </radialGradient>
+                  <linearGradient id="heroLandFill" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#ff6579" stop-opacity=".48"/>
+                    <stop offset="1" stop-color="#8f1b3d" stop-opacity=".16"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="150" cy="150" r="143" fill="url(#heroGlobeFill)"/>
+                <g clip-path="url(#heroGlobeClip)">
+                  <g class="globe-grid">
+                    <ellipse cx="150" cy="150" rx="137" ry="48"/>
+                    <ellipse cx="150" cy="150" rx="137" ry="91"/>
+                    <ellipse cx="150" cy="150" rx="56" ry="137"/>
+                    <ellipse cx="150" cy="150" rx="104" ry="137"/>
+                    <path d="M13 150h274M150 13v274"/>
+                  </g>
+                  <g class="globe-land">
+                    <path d="m43 70 17-11 20 4 11 14 18 2 7 12-14 9-5 17-14 7-5 19 11 13-4 14-13 9-3 17-12 8-7-20-10-11-3-19-12-11 2-23-8-12 9-17-1-18z"/>
+                    <path d="m90 157 13 8 11 17-4 19-9 12-3 24-10 21-9-15 1-19-10-14 3-16-7-14 10-10z"/>
+                    <path d="m126 73 18-12 19 4 12-7 14 8 15-2 15 13 18 2 12 16-11 12-17-4-10 10-18-3-7 13-16-5-8 12-17-6-12-17-17-3-7-15 7-12z"/>
+                    <path d="m151 140 18-9 17 9 10 17-9 13 8 13-10 18-8 23-11 17-9-8-3-17-12-14-2-19-10-13 7-15z"/>
+                    <path d="m216 191 17-6 15 9 7 14-13 11-18-3-11-10z"/>
+                  </g>
+                  <g class="globe-routes">
+                    <path d="M71 121Q130 61 199 97"/>
+                    <path d="M101 188Q154 108 224 137"/>
+                    <path d="M78 104Q145 166 206 103"/>
+                    <path d="M117 212Q164 159 226 184"/>
+                  </g>
+                  <g class="globe-points">
+                    <circle cx="79" cy="119" r="3"/>
+                    <circle cx="142" cy="94" r="3"/>
+                    <circle cx="185" cy="128" r="3"/>
+                    <circle cx="218" cy="139" r="3"/>
+                    <circle cx="162" cy="183" r="3"/>
+                    <circle cx="104" cy="189" r="3"/>
+                  </g>
+                </g>
+                <circle class="globe-rim" cx="150" cy="150" r="143"/>
+              </svg>
+            </div>
+            <button class="globe-node node-new-york" type="button" data-quick-location="New York, USA" aria-label="Search public reports for New York, USA"><span>NEW YORK</span></button>
+            <button class="globe-node node-london" type="button" data-quick-location="London, United Kingdom" aria-label="Search public reports for London, United Kingdom"><span>LONDON</span></button>
+            <button class="globe-node node-manama" type="button" data-quick-location="Manama, Bahrain" aria-label="Search public reports for Manama, Bahrain"><span>MANAMA</span></button>
+            <button class="globe-node node-tokyo" type="button" data-quick-location="Tokyo, Japan" aria-label="Search public reports for Tokyo, Japan"><span>TOKYO</span></button>
+          </div>
+          <div class="globe-bottomline">
+            <span id="globeInstructions">SELECT A PULSE TO SEARCH</span>
+            <span class="globe-coordinates">NODES / 04</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="search-panel" aria-label="Event search">
+        <form id="searchForm">
+          <div class="field location-field">
+            <label for="location">Location</label>
+            <div class="input-wrap">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              <input id="location" name="location" type="text" value="Manama, Bahrain" placeholder="City, region, or country" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="startDate">From</label>
+            <input id="startDate" name="startDate" type="date" value="2026-09-15" required>
+          </div>
+          <div class="field">
+            <label for="endDate">To</label>
+            <input id="endDate" name="endDate" type="date" value="2026-09-20" required>
+          </div>
+          <div class="field keyword-field">
+            <label for="keyword">Keyword <span>Optional</span></label>
+            <input id="keyword" name="keyword" type="text" placeholder="festival, sports, weather">
+          </div>
+          <button class="search-button" type="submit">
+            <span>Search</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </form>
+      </section>
+
+      <section class="quick-explore" aria-labelledby="quickExploreTitle">
+        <div class="quick-intro">
+          <p class="section-label">QUICK STARTS</p>
+          <h2 id="quickExploreTitle">Pick a place to explore</h2>
+          <p>Run a live news search using your selected dates and keyword.</p>
+        </div>
+        <div class="quick-places">
+          <button class="quick-place" type="button" data-quick-location="Manama, Bahrain">
+            <span class="quick-number" aria-hidden="true">01</span>
+            <span class="quick-place-copy"><strong>Manama</strong><small>Bahrain</small></span>
+            <span class="quick-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="quick-place" type="button" data-quick-location="Tokyo, Japan">
+            <span class="quick-number" aria-hidden="true">02</span>
+            <span class="quick-place-copy"><strong>Tokyo</strong><small>Japan</small></span>
+            <span class="quick-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="quick-place" type="button" data-quick-location="London, United Kingdom">
+            <span class="quick-number" aria-hidden="true">03</span>
+            <span class="quick-place-copy"><strong>London</strong><small>United Kingdom</small></span>
+            <span class="quick-arrow" aria-hidden="true">↗</span>
+          </button>
+          <button class="quick-place" type="button" data-quick-location="New York, USA">
+            <span class="quick-number" aria-hidden="true">04</span>
+            <span class="quick-place-copy"><strong>New York</strong><small>USA</small></span>
+            <span class="quick-arrow" aria-hidden="true">↗</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="map-section" aria-label="Interactive world map">
+        <div class="map-heading">
+          <div>
+            <p class="section-label">EXPLORE BY PLACE</p>
+            <h2>Select a place on the map</h2>
+          </div>
+          <p id="mapInstructions">Click the map to select a place. Keyboard users can enter a city or country above and press Search; adjust dates in the map popup.</p>
+        </div>
+        <div id="map" role="region" aria-label="Interactive map" aria-describedby="mapInstructions"></div>
+        <div class="map-credit">Map tiles © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a> · Locations by OpenStreetMap Nominatim</div>
+      </section>
+
+      <section class="results-section">
+        <div class="results-header">
+          <div>
+            <p class="section-label">TIMELINE</p>
+            <h2 id="resultsTitle">Select a place</h2>
+          </div>
+          <div class="result-meta" id="resultMeta" role="status" aria-live="polite" aria-atomic="true">Select a place and dates to search</div>
+        </div>
+
+        <div class="filter-row">
+          <button class="filter active" type="button" data-filter="all">All events</button>
+          <button class="filter" type="button" data-filter="news">News</button>
+          <button id="timelineReplayButton" class="replay-button" type="button" aria-pressed="false" disabled>
+            <span aria-hidden="true">▶</span>
+            <span class="replay-label">Replay timeline</span>
+          </button>
+        </div>
+
+        <div class="timeline" id="timeline"></div>
+
+        <div class="empty-state" id="emptyState" role="status" aria-live="polite" hidden>
+          <div class="radar-loader" id="radarLoader" aria-hidden="true" hidden>
+            <div class="radar-scope">
+              <i class="radar-sweep"></i>
+              <i class="radar-blip"></i>
+            </div>
+            <div class="radar-label">SCANNING PUBLIC REPORTS</div>
+          </div>
+          <span id="emptyTitle">Choose a place and timeline</span>
+          <p id="emptyMessage">Click a place on the map to search public news for the current date range.</p>
+          <a id="webSearchLink" class="fallback-link" href="#" target="_blank" rel="noopener noreferrer" hidden>Open a web news search</a>
+        </div>
+      </section>
+    </main>
+
+    <section id="infoPanel" class="about-panel" role="tabpanel" aria-labelledby="infoTab" tabindex="0" hidden>
+      <div class="about-heading">
+        <p class="eyebrow">ABOUT ECHOMAP / PURPOSE &amp; PRIVACY</p>
+        <h1>Public events.<br><em>Clear boundaries.</em></h1>
+        <p>EchoMap helps people explore publicly reported events by place and date. It is intended for public-event research, not private-person investigations.</p>
+      </div>
+
+      <div class="policy-tabs" role="tablist" aria-label="About and legal information">
+        <button id="overviewPolicyTab" class="policy-tab active" type="button" role="tab" aria-selected="true" aria-controls="overviewPolicyPanel" tabindex="0">How it helps</button>
+        <button id="privacyPolicyTab" class="policy-tab" type="button" role="tab" aria-selected="false" aria-controls="privacyPolicyPanel" tabindex="-1">Privacy policy</button>
+        <button id="termsPolicyTab" class="policy-tab" type="button" role="tab" aria-selected="false" aria-controls="termsPolicyPanel" tabindex="-1">Terms of service</button>
+        <button id="cookiesPolicyTab" class="policy-tab" type="button" role="tab" aria-selected="false" aria-controls="cookiesPolicyPanel" tabindex="-1">Cookie policy</button>
+      </div>
+
+      <div id="overviewPolicyPanel" class="policy-content" role="tabpanel" aria-labelledby="overviewPolicyTab" tabindex="0">
+        <section class="about-section" aria-labelledby="helpsTitle">
+          <p class="section-label">WHAT THIS HELPS YOU DO</p>
+          <h2 id="helpsTitle">Turn public reporting into a useful timeline.</h2>
+          <div class="about-cards">
+            <article>
+              <span class="about-number">01</span>
+              <h3>See events in context</h3>
+              <p>Choose a place and dates to scan public news reports in chronological order.</p>
+            </article>
+            <article>
+              <span class="about-number">02</span>
+              <h3>Compare public coverage</h3>
+              <p>Review reports from different publishers and follow their original links.</p>
+            </article>
+            <article>
+              <span class="about-number">03</span>
+              <h3>Verify before concluding</h3>
+              <p>Use the timeline as a starting point for research, not as proof that a claim is true.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="privacy-notice" aria-labelledby="privacySummaryTitle">
+          <p class="section-label">DATA NOTICE</p>
+          <h2 id="privacySummaryTitle">NO ACCOUNT OR IDENTITY DETAILS ARE REQUESTED BY ECHOMAP.</h2>
+          <p class="privacy-lead">EchoMap has no user account system or search-history database. News searches use a small Netlify Function.</p>
+          <p>Your place and optional keyword are sent through EchoMap's Netlify Function to Bing News; clicked map coordinates are sent to OpenStreetMap Nominatim to identify the place. If you choose to open a fallback search link, Google News receives that search. The app keeps results temporarily in the open page. Netlify and the providers may process connection data under their own policies. Read the Privacy Policy for details.</p>
+        </section>
+
+        <section class="about-section boundaries" aria-labelledby="boundariesTitle">
+          <p class="section-label">PURPOSE &amp; LIMITS</p>
+          <h2 id="boundariesTitle">Public-event research, not private-person investigation.</h2>
+          <ul>
+            <li>Designed to use publicly available information and authorized APIs.</li>
+            <li>Not designed to access private accounts, messages, passwords, restricted databases, or information requiring unauthorized access.</li>
+            <li>Focused on publicly reported events; avoid investigating or targeting private individuals.</li>
+            <li>Original publisher links are shown when the feed provides them.</li>
+            <li>Public reports can be wrong, outdated, incomplete, or conflicting. Verify claims with original sources.</li>
+            <li>Use the app and each external service in accordance with applicable laws and their terms.</li>
+          </ul>
+        </section>
+      </div>
+
+      <section id="privacyPolicyPanel" class="policy-content legal-copy" role="tabpanel" aria-labelledby="privacyPolicyTab" tabindex="0" hidden>
+        <p class="section-label">LAST UPDATED: 17 NOVEMBER 2026</p>
+        <h2 id="privacyPolicyTitle">Privacy Policy</h2>
+        <p class="policy-intro">This draft describes the current EchoMap web app, its Netlify Function, and its third-party requests. It is not a guarantee of legal compliance.</p>
+        <div class="policy-action">
+          <strong>Before public launch:</strong> add the project operator's legal name, hosting provider, and applicable jurisdiction. For privacy questions, contact <a href="mailto:echomapwebsite@gmail.com">echomapwebsite@gmail.com</a>. Legal requirements depend on where the service is operated and used.
+        </div>
+
+        <h3>1. Who operates EchoMap</h3>
+        <p>The operator's legal identity has not been provided. For privacy questions or requests, contact <a href="mailto:echomapwebsite@gmail.com">echomapwebsite@gmail.com</a>. The app has no account service or search-history database. A small Netlify Function forwards news searches to Bing News.</p>
+
+        <h3>2. Information processed to provide the app</h3>
+        <ul>
+          <li><strong>News search:</strong> the place text, optional keyword, English-language market, and (for recent searches) a coarse 7-, 30-, or 365-day freshness window are sent from your browser to an EchoMap Netlify Function, which forwards the query to Bing News RSS. Bing receives the search query; Netlify may process the request and connection data. The exact selected date range is applied in your browser.</li>
+          <li><strong>Optional fallback search:</strong> if Bing returns no matches or is unavailable, the app may offer a Google News search link. Only if you open that link does your browser send the place, optional keyword, and dates to Google News.</li>
+          <li><strong>Map lookup:</strong> when you click the map, the clicked latitude, longitude, and map zoom are sent to OpenStreetMap Nominatim to resolve a place name.</li>
+          <li><strong>Map tiles:</strong> the browser requests visible map tiles from OpenStreetMap. Normal connection information is sent as part of those requests.</li>
+          <li><strong>External assets:</strong> the app loads the Share Tech Mono font from Google Fonts and Leaflet files from unpkg. Those services receive browser requests for the assets.</li>
+          <li><strong>Browser memory:</strong> search results are held in page memory while the page is open. The app may reuse a matching result for 60 seconds. The app does not write searches to cookies, local storage, or a search-history database.</li>
+        </ul>
+
+        <h3>3. Why these requests are made</h3>
+        <p>Search text is used to request matching news; map coordinates are used to identify the selected place; map tile and asset requests are used to display the interface. Do not enter sensitive information, passwords, private-person details, or information you are not authorized to share.</p>
+
+        <h3>4. Third-party services and hosting</h3>
+        <p>News searches pass through an EchoMap Netlify Function before being forwarded to Bing News. Netlify may receive the search query and technical data such as an IP address, browser information, request time, and requested URL. Map, map-tile, font, and library requests go directly from your browser to their providers. The app does not intentionally store search requests or maintain server-side search history; Netlify may process request data under its own terms and policies. EchoMap does not control provider systems, retention, or practices. Review the current notices for <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer">Netlify</a>, <a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener noreferrer">Microsoft/Bing</a>, <a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener noreferrer">OpenStreetMap Foundation</a>, and <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google</a>.</p>
+
+        <h3>5. Storage, retention, and security</h3>
+        <p>Search results and the short-lived cache stay in browser memory and the app does not maintain a server-side search history. Memory is normally cleared when the page is closed or reloaded; a cached result may be reused for 60 seconds while the page remains open. Netlify and other providers may process request data under their own retention practices. Internet transmission and third-party services cannot be guaranteed to be risk-free.</p>
+
+        <h3>6. Your choices and requests</h3>
+        <p>You can choose not to use search, avoid entering optional keywords, block external requests in your browser, or close the page. Blocking requests can prevent maps, fonts, or reports from working. For questions or requests, contact <a href="mailto:echomapwebsite@gmail.com">echomapwebsite@gmail.com</a>.</p>
+
+        <h3>7. Changes and legal review</h3>
+        <p>This policy should be reviewed whenever providers, hosting, data flows, or features change. The operator should obtain jurisdiction-specific legal advice and update this notice before public deployment.</p>
+      </section>
+
+      <section id="termsPolicyPanel" class="policy-content legal-copy" role="tabpanel" aria-labelledby="termsPolicyTab" tabindex="0" hidden>
+        <p class="section-label">LAST UPDATED: 17 NOVEMBER 2026</p>
+        <h2 id="termsPolicyTitle">Terms of Service</h2>
+        <p class="policy-intro">Draft terms for the current EchoMap prototype. The operator's legal identity and governing jurisdiction still need to be supplied and reviewed before launch. Contact: <a href="mailto:echomapwebsite@gmail.com">echomapwebsite@gmail.com</a>.</p>
+
+        <h3>1. What the service does</h3>
+        <p>EchoMap is a research aid that searches a third-party public news feed and displays matching headlines, dates, excerpts, and publisher links. It is not an official record, a comprehensive archive, or a verification service.</p>
+
+        <h3>2. Responsible use</h3>
+        <p>Use EchoMap only for lawful purposes. Do not use it to access private or restricted information, target or harass private individuals, publish sensitive personal data, or make consequential decisions about a person from search results. Respect the rights and terms of the linked publishers and external providers.</p>
+
+        <h3>3. Third-party content and services</h3>
+        <p>News content is supplied by Bing News and belongs to its respective publishers and rights holders. If you choose the fallback link, Google News performs that search independently. Map data and place lookup are supplied by OpenStreetMap-related services. External services are independent of EchoMap and may change, restrict, or remove content. Their own terms apply to your use of them.</p>
+
+        <h3>4. Accuracy, availability, and important decisions</h3>
+        <p>Search coverage can be incomplete, delayed, or unavailable. Headlines, excerpts, dates, and locations may be inaccurate or out of context; different sources may conflict. Check the original publication and other reliable sources before drawing conclusions. EchoMap is not for emergency use and does not provide legal, medical, financial, or other professional advice.</p>
+
+        <h3>5. No promise of uninterrupted service</h3>
+        <p>The prototype is provided without a promise that it will always be available, complete, or error-free. Any limitation of liability or warranty must be drafted for the operator and jurisdiction by qualified counsel; nothing here removes rights that cannot legally be excluded.</p>
+
+        <h3>6. Governing terms and contact</h3>
+        <p>The operator's legal name and applicable jurisdiction have not been supplied. For questions about these draft terms, contact <a href="mailto:echomapwebsite@gmail.com">echomapwebsite@gmail.com</a>. Obtain jurisdiction-specific legal review before treating them as a binding contract.</p>
+      </section>
+
+      <section id="cookiesPolicyPanel" class="policy-content legal-copy" role="tabpanel" aria-labelledby="cookiesPolicyTab" tabindex="0" hidden>
+        <p class="section-label">LAST UPDATED: 17 NOVEMBER 2026</p>
+        <h2 id="cookiesPolicyTitle">Cookie Policy</h2>
+        <p class="policy-intro">This policy explains how cookies and browser storage are used by EchoMap and the services it relies on.</p>
+
+        <h3>1. Cookies and storage used by EchoMap</h3>
+        <p>The EchoMap app does not set or read first-party cookies, or save data in local or session storage. Search results and the short-lived search cache stay in page memory and are cleared when the page is reloaded or closed.</p>
+
+        <h3>2. Third-party services</h3>
+        <p>EchoMap uses a Netlify Function to forward news searches to Bing News, loads map tiles and place lookup from OpenStreetMap services, and loads font and map-library assets from Google Fonts and unpkg. If you choose to open the fallback search link, Google News also receives that request. Netlify and these providers may process technical request data under their own policies. EchoMap does not control their data or cookie practices.</p>
+
+        <h3>3. Managing cookies</h3>
+        <p>You can manage or delete cookies through your browser settings. Blocking requests to external services may prevent the map, news results, or fonts from loading. EchoMap does not include analytics or advertising-cookie code.</p>
+      </section>
+    </section>
+
+    <footer>
+      <p>EchoMap uses only publicly accessible sources. Verify all information with the original publication.</p>
+      <div class="footer-actions">
+        <a href="mailto:echomapwebsite@gmail.com">Contact us: echomapwebsite@gmail.com</a>
+        <button id="methodButton" type="button">View methodology</button>
+      </div>
+    </footer>
+  </div>
+
+  <dialog id="methodDialog" aria-labelledby="methodTitle">
+    <button class="dialog-close" type="button" aria-label="Close">×</button>
+    <p class="section-label">METHODOLOGY</p>
+    <h3 id="methodTitle">How EchoMap searches</h3>
+    <ol>
+      <li>Resolve a clicked map location using OpenStreetMap Nominatim</li>
+      <li>Search Bing News RSS for public reports matching the selected place</li>
+      <li>Sort matching reports chronologically and link to each publisher</li>
+    </ol>
+    <p class="dialog-note">EchoMap only searches publicly accessible news metadata. Search coverage depends on the source index and place names; it does not access private accounts or restricted databases. Verify reports with the original publisher.</p>
+  </dialog>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="app.js"></script>
+</body>
+</html>

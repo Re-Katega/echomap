@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title description">
+  <title id="title">EchoMap logo mark</title>
+  <desc id="description">A red three-bar signal inside a light circular outline.</desc>
+  <circle cx="32" cy="32" r="29" fill="none" stroke="#f3edf0" stroke-width="2"/>
+  <g fill="#ff3c55">
+    <rect x="20" y="23" width="4" height="18" rx="2"/>
+    <rect x="30" y="15" width="4" height="34" rx="2"/>
+    <rect x="40" y="20" width="4" height="24" rx="2"/>
+  </g>
+</svg>
